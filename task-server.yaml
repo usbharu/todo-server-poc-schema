@@ -1,0 +1,216 @@
+openapi: 3.0.3
+info:
+  title: Task Server API
+  description: Task Server API
+  version: 1.0.0
+servers:
+  - url: 'http://localhost:8000'
+    description: Local development server
+paths:
+  /tasks:
+    get:
+      summary: Get all tasks
+      operationId: task.getAllTasks
+      tags:
+        - task
+      responses:
+        '200':
+          description: List of tasks
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/task'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    post:
+      summary: Create a new task
+      operationId: task.createTask
+      tags:
+        - task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/taskCreate'
+      responses:
+        '201':
+          description: Task created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/task'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+  /tasks/{taskId}:
+    get:
+      summary: Get a task
+      operationId: task.getTask
+      tags:
+        - task
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          description: The ID of the task to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A task object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/task'
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    put:
+      summary: Update a task
+      operationId: task.updateTask
+      tags:
+        - task
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          description: The ID of the task to update
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/taskUpdate'
+      responses:
+        '200':
+          description: Task updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/task'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+    delete:
+      summary: Delete a task
+      operationId: task.deleteTask
+      tags:
+        - task
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          description: The ID of the task to delete
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Task deleted successfully
+        '404':
+          description: Task not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+components:
+  schemas:
+    task:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the task
+          example: '12345'
+        name:
+          type: string
+          description: The name of the task
+          example: 'Sample Task'
+      required:
+        - id
+        - name
+    taskCreate:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier for the task (optional, will be generated if not provided)
+          example: '12345'
+        name:
+          type: string
+          description: The name of the task
+          example: 'Sample Task'
+      required:
+        - name
+    taskUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the task
+          example: 'Updated Task'
+    error:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: Error code
+          example: 404
+        message:
+          type: string
+          description: Error message
+          example: 'Task not found'
+        details:
+          type: string
+          description: Additional error details
+          example: 'The task with ID 12345 was not found'
+      required:
+        - code
+        - message
