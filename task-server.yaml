@@ -179,10 +179,6 @@ components:
     taskCreate:
       type: object
       properties:
-        id:
-          type: string
-          description: The unique identifier for the task (optional, will be generated if not provided)
-          example: '12345'
         name:
           type: string
           description: The name of the task
