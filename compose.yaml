@@ -1,0 +1,9 @@
+services:
+  prism:
+    image: stoplight/prism:latest
+    platform: linux/amd64
+    command: mock -h 0.0.0.0 /task-server.yaml
+    volumes:
+      - ./task-server.yaml:/task-server.yaml
+    ports:
+      - "4010:4010"
