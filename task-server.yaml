@@ -7,6 +7,53 @@ servers:
   - url: 'http://localhost:8080'
     description: Local development server
 paths:
+  /health:
+    get:
+      summary: Get application health status
+      operationId: health.getHealth
+      tags:
+        - health
+      security: []
+      responses:
+        '200':
+          description: Application is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/healthStatus'
+              example:
+                status: 'UP'
+                timestamp: '2024-01-15T10:30:00Z'
+                components:
+                  database:
+                    status: 'UP'
+                    details:
+                      connection: 'PostgreSQL'
+                      responseTime: '5ms'
+        '503':
+          description: Application is unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/healthStatus'
+              example:
+                status: 'DOWN'
+                timestamp: '2024-01-15T10:30:00Z'
+                components:
+                  database:
+                    status: 'DOWN'
+                    details:
+                      error: 'Connection refused'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/error'
+              example:
+                code: 500
+                message: 'Internal Server Error'
+                details: 'Health check service unavailable'
   /tasks:
     get:
       summary: Get all tasks
@@ -237,6 +284,45 @@ components:
           type: string
           description: The name of the task
           example: 'Updated Task'
+    healthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [UP, DOWN]
+          description: Overall application health status
+          example: 'UP'
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp of the health check
+          example: '2024-01-15T10:30:00Z'
+        components:
+          type: object
+          properties:
+            database:
+              $ref: '#/components/schemas/healthComponent'
+          description: Health status of individual components
+      required:
+        - status
+        - timestamp
+        - components
+    healthComponent:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [UP, DOWN]
+          description: Component health status
+          example: 'UP'
+        details:
+          type: object
+          description: Additional component details
+          example: 
+            connection: 'PostgreSQL'
+            responseTime: '5ms'
+      required:
+        - status
     error:
       type: object
       properties:
