@@ -261,28 +261,28 @@ components:
           type: string
           description: The unique identifier for the task
           example: '12345'
-        name:
+        title:
           type: string
-          description: The name of the task
+          description: The title of the task
           example: 'Sample Task'
       required:
         - id
-        - name
+        - title
     taskCreate:
       type: object
       properties:
-        name:
+        title:
           type: string
-          description: The name of the task
+          description: The title of the task
           example: 'Sample Task'
       required:
-        - name
+        - title
     taskUpdate:
       type: object
       properties:
-        name:
+        title:
           type: string
-          description: The name of the task
+          description: The title of the task
           example: 'Updated Task'
     healthStatus:
       type: object
