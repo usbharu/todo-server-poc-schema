@@ -3,7 +3,7 @@
   "info": {
     "title": "ToDoUser API",
     "description": "TodoアプリバックエンドのUserと認証に関するAPI",
-    "version": "ef17fc8"
+    "version": "v0.0.1"
   },
   "servers": [
     {
@@ -25,6 +25,15 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/SignUpDto"
+              },
+              "examples": {
+                "期待されるリクエストボディ": {
+                  "description": "期待されるリクエストボディ",
+                  "value": {
+                    "username": "testuser1234",
+                    "password": "veeeeeeeeeeeeeryStrongPassword"
+                  }
+                }
               }
             }
           },
@@ -68,6 +77,45 @@
                       "detail": "ユーザーの作成に失敗しました：[ユーザー名fはすでに使用されています]",
                       "instance": "/auth/v1/sign_up"
                     }
+                  },
+                  "入力内容にエラーがある": {
+                    "description": "入力内容にエラーがある",
+                    "value": {
+                      "type": "about:blank",
+                      "title": "Validation Failed",
+                      "status": 400,
+                      "detail": "入力内容にエラーがあります",
+                      "instance": "/auth/v1/sign_up",
+                      "errors": [
+                        {
+                          "field": "username",
+                          "message": "ユーザー名に半角英数字以外が使用されています",
+                          "rejectedValue": "あ"
+                        }
+                      ]
+                    }
+                  },
+                  "入力内容に複数エラーがある": {
+                    "description": "入力内容に複数エラーがある",
+                    "value": {
+                      "type": "about:blank",
+                      "title": "Validation Failed",
+                      "status": 400,
+                      "detail": "入力内容にエラーがあります",
+                      "instance": "/auth/v1/sign_up",
+                      "errors": [
+                        {
+                          "field": "password",
+                          "message": "パスワードは必須です",
+                          "rejectedValue": ""
+                        },
+                        {
+                          "field": "username",
+                          "message": "ユーザー名に半角英数字以外が使用されています",
+                          "rejectedValue": "あ"
+                        }
+                      ]
+                    }
                   }
                 }
               }
@@ -79,14 +127,25 @@
     "/auth/v1/sign_in": {
       "post": {
         "tags": [
-          "auth-controller"
+          "user"
         ],
+        "summary": "ログイン",
         "operationId": "signInJson",
         "requestBody": {
+          "description": "ログインするユーザーオブジェクト",
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/SignInDto"
+              },
+              "examples": {
+                "期待されるリクエストボディ": {
+                  "description": "期待されるリクエストボディ",
+                  "value": {
+                    "username": "testuser1234",
+                    "password": "veeeeeeeeeeeeeryStrongPassword"
+                  }
+                }
               }
             }
           },
@@ -98,9 +157,87 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "string"
+                  "$ref": "#/components/schemas/Token"
+                },
+                "examples": {
+                  "ログイン成功": {
+                    "description": "ログイン成功",
+                    "value": {
+                      "token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJ1c2VyIiwic3ViIjoiNThlZDk0NzItZWE2MS00ZmZkLTk1YzYtODRiNzc3Nzc0MzUwIiwic2NvcGUiOlsicmVhZCIsIndyaXRlIl19.uqs4KgPYEgJYwSOPnxJNwXh9EIpJ3AKYrPgy0PxLw71V7zoOwLxdXHjDxTKwBhmsnqk18yVpIoOQbWG3Eoaj43z5skkVdtNIHT9cT_23upjtzB0dyT08M8G5TqNIrM96EfChStOxIeaDzaENLLfpucLFDoqDmuKBWqGmGYRgjEt_tXTSB66GJ0Ldrw1N1fLLXitdHGxVJwOhweqsfLLidLPCgfl5c5JbkFevRUWRORMKZ7oGUylXFvonNX8Ohwm4qK82ah_JqRRlllozN74ZrzJQdy4XX88oA9hphcOh7gc4i1iLMsTvK7kOzEQOyuUaSyctJZ61gLeWLhptYqPo4Q"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                },
+                "examples": {
+                  "入力内容にエラーがある": {
+                    "description": "入力内容にエラーがある",
+                    "value": {
+                      "type": "about:blank",
+                      "title": "Validation Failed",
+                      "status": 400,
+                      "detail": "入力内容にエラーがあります",
+                      "instance": "/auth/v1/sign_up",
+                      "errors": [
+                        {
+                          "field": "username",
+                          "message": "ユーザー名に半角英数字以外が使用されています",
+                          "rejectedValue": "あ"
+                        }
+                      ]
+                    }
+                  },
+                  "入力内容に複数エラーがある": {
+                    "description": "入力内容に複数エラーがある",
+                    "value": {
+                      "type": "about:blank",
+                      "title": "Validation Failed",
+                      "status": 400,
+                      "detail": "入力内容にエラーがあります",
+                      "instance": "/auth/v1/sign_up",
+                      "errors": [
+                        {
+                          "field": "password",
+                          "message": "パスワードは必須です",
+                          "rejectedValue": ""
+                        },
+                        {
+                          "field": "username",
+                          "message": "ユーザー名に半角英数字以外が使用されています",
+                          "rejectedValue": "あ"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                },
+                "examples": {
+                  "ユーザー名かパスワードが正しくない": {
+                    "description": "ユーザー名かパスワードが正しくない",
+                    "value": {
+                      "type": "about:blank",
+                      "title": "Unauthorized",
+                      "status": 401,
+                      "detail": "ユーザ名かパスワードが正しくありません",
+                      "instance": "/auth/v1/sign_in"
+                    }
                   }
                 }
               }
@@ -112,21 +249,94 @@
     "/api/v1/users/i": {
       "get": {
         "tags": [
-          "users-controller"
+          "user"
         ],
+        "summary": "現在ログインしているユーザーの取得",
         "operationId": "getI",
         "responses": {
           "200": {
             "description": "OK",
             "content": {
-              "*/*": {
+              "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/UserDetail"
+                },
+                "examples": {
+                  "ログイン中のユーザー取得成功": {
+                    "description": "ログイン中のユーザー取得成功",
+                    "value": {
+                      "username": "ab",
+                      "userId": "77b714bc-f064-42ad-b01c-ad4a1d4bd87e",
+                      "createdAt": "2025-07-24T15:06:06.647007100Z"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "headers": {
+              "WWW-Authenticate": {
+                "description": "401となった原因",
+                "style": "simple",
+                "schema": {
+                  "type": "string"
+                },
+                "examples": {
+                  "トークンがJWTの形式じゃない": {
+                    "description": "トークンがJWTの形式じゃない",
+                    "value": "Bearer realm\u003d\"api\", error\u003d\"invalid_token\", error_description\u003d\"An error occurred while attempting to decode the Jwt: Malformed token\""
+                  }
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetail"
+                },
+                "examples": {
+                  "ログイン情報が間違っている": {
+                    "description": "ログイン情報が間違っている",
+                    "value": {
+                      "type": "about:blank",
+                      "title": "Authentication Failed",
+                      "status": 401,
+                      "detail": "Full authentication is required to access this resource",
+                      "instance": "/api/v1/users/i"
+                    }
+                  },
+                  "ログイントークンが不正": {
+                    "description": "ログイントークンが不正",
+                    "value": {
+                      "type": "about:blank",
+                      "title": "invalid_token",
+                      "status": 401,
+                      "detail": "An error occurred while attempting to decode the Jwt: Malformed token",
+                      "instance": "/api/v1/users/i"
+                    }
+                  },
+                  "トークンの署名が不正": {
+                    "description": "トークンが古いなどの可能性がある",
+                    "value": {
+                      "type": "about:blank",
+                      "title": "invalid_token",
+                      "status": 401,
+                      "detail": "An error occurred while attempting to decode the Jwt: Signed JWT rejected: Invalid signature",
+                      "instance": "/api/v1/users/i"
+                    }
+                  }
                 }
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "jwt": []
+          }
+        ]
       }
     },
     "/.well-known/jwks.json": {
@@ -134,17 +344,23 @@
         "tags": [
           "jwks-controller"
         ],
+        "summary": "JWKsエンドポイント",
+        "description": "RFC7517",
         "operationId": "jwks",
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Json Web Key Setを返します",
             "content": {
-              "*/*": {
-                "schema": {
-                  "type": "object",
-                  "additionalProperties": {
-                    "type": "object"
-                  }
+              "application/json": {
+                "example": {
+                  "keys": [
+                    {
+                      "kty": "RSA",
+                      "e": "AQAB",
+                      "kid": "nEpO3EdePSSOWX-2zjpizXBWtmcY2yB4-XbVGJJK8Oo",
+                      "n": "9DfhZ92pIYxtxfWKpRuWAB1ybQbhfHhFgXtHsxVkmWMCyL5sa5RXsEXxiwmGQsCVN5pHAP2t0-GgeURgDOR1ugVdQwbQGX0qrFPSDtTe3BcdOFIGnbUtikDcVUj_PcgW3QWISNzZzSy_c6JayEIswhvNUReTiz3r5UFpKQ2N2CCCcflknFSU-_qX9MvSbge0zjjnqNd41KIBafdvlWD0LZS9LHbPA5rp1BfhX01NGPGs5NP8DczzEwYc-011SIULcMA7sU2B4DoxqGHDyprddhWM0PkeuSg3l1RUbtx1NEgS2WmJDt9snrrL6PQfftLo9hsHNhEMQbvLDUwYnX7Tow"
+                    }
+                  ]
                 }
               }
             }
@@ -174,7 +390,8 @@
             "type": "string",
             "format": "date-time"
           }
-        }
+        },
+        "description": "ユーザーの詳細な情報\nログインしているユーザー自身の情報"
       },
       "ProblemDetail": {
         "type": "object",
@@ -224,6 +441,17 @@
           }
         }
       },
+      "Token": {
+        "required": [
+          "token"
+        ],
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          }
+        }
+      },
       "SignInDto": {
         "required": [
           "password",
@@ -242,6 +470,15 @@
             "type": "string"
           }
         }
+      }
+    },
+    "securitySchemes": {
+      "jwt": {
+        "type": "http",
+        "description": "JWTを利用したトークン",
+        "in": "header",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
       }
     }
   }
