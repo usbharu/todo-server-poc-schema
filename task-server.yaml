@@ -263,6 +263,7 @@ components:
           example: '12345'
         title:
           type: string
+          maxLength: 255
           description: The title of the task
           example: 'Sample Task'
       required:
@@ -273,6 +274,7 @@ components:
       properties:
         title:
           type: string
+          maxLength: 255
           description: The title of the task
           example: 'Sample Task'
       required:
@@ -282,6 +284,7 @@ components:
       properties:
         title:
           type: string
+          maxLength: 255
           description: The title of the task
           example: 'Updated Task'
     healthStatus:
