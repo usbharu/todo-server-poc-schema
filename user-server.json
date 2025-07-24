@@ -3,7 +3,7 @@
   "info": {
     "title": "ToDoUser API",
     "description": "TodoアプリバックエンドのUserと認証に関するAPI",
-    "version": "42607c8"
+    "version": "ef17fc8"
   },
   "servers": [
     {
@@ -213,9 +213,13 @@
         "type": "object",
         "properties": {
           "username": {
+            "maxLength": 255,
+            "minLength": 0,
+            "pattern": "[a-zA-Z0-9]+",
             "type": "string"
           },
           "password": {
+            "minLength": 1,
             "type": "string"
           }
         }
@@ -228,9 +232,13 @@
         "type": "object",
         "properties": {
           "username": {
+            "maxLength": 255,
+            "minLength": 0,
+            "pattern": "[a-zA-Z0-9]+",
             "type": "string"
           },
           "password": {
+            "minLength": 1,
             "type": "string"
           }
         }
