@@ -77,12 +77,20 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
+              example:
+                code: 401
+                message: 'Unauthorized'
+                details: 'User ID not found in token'
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
+              example:
+                code: 500
+                message: 'Internal server error'
+                details: 'database connection failed'
     post:
       summary: Create a new task
       operationId: task.createTask
@@ -109,18 +117,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
+              example:
+                code: 400
+                message: 'Bad request'
+                details: 'title field is required and cannot be empty'
         '401':
           description: Unauthorized
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
+              example:
+                code: 401
+                message: 'Unauthorized'
+                details: 'User ID not found in token'
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
+              example:
+                code: 500
+                message: 'Internal server error'
+                details: 'database connection failed'
   /tasks/{taskId}:
     get:
       summary: Get a task
@@ -149,18 +169,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
+              example:
+                code: 401
+                message: 'Unauthorized'
+                details: 'User ID not found in token'
         '404':
           description: Task not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
+              example:
+                code: 404
+                message: 'Task not found'
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
+              example:
+                code: 500
+                message: 'Internal server error'
+                details: 'database connection failed'
     put:
       summary: Update a task
       operationId: task.updateTask
@@ -194,24 +225,39 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
+              example:
+                code: 400
+                message: 'Bad request'
+                details: 'task title cannot exceed 255 characters'
         '401':
           description: Unauthorized
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
+              example:
+                code: 401
+                message: 'Unauthorized'
+                details: 'User ID not found in token'
         '404':
           description: Task not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
+              example:
+                code: 404
+                message: 'Task not found'
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
+              example:
+                code: 500
+                message: 'Internal server error'
+                details: 'database connection failed'
     delete:
       summary: Delete a task
       operationId: task.deleteTask
@@ -235,18 +281,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
+              example:
+                code: 401
+                message: 'Unauthorized'
+                details: 'User ID not found in token'
         '404':
           description: Task not found
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
+              example:
+                code: 404
+                message: 'Task not found'
         '500':
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/error'
+              example:
+                code: 500
+                message: 'Internal server error'
+                details: 'database connection failed'
 components:
   securitySchemes:
     bearerAuth:
