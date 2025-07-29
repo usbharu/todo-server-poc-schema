@@ -1,0 +1,17 @@
+name: generate-documents.yaml
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build-documents:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Document by osdg
+        uses: usbharu/osdg-build-action@v0.0.3
+        with:
+          repo: ${{ github.repository }}
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: './site/out'
+      - uses: actions/deploy-pages@v4

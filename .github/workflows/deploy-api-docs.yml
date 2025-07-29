@@ -1,111 +1,111 @@
-name: Deploy API Documentation
-
-on:
-  push:
-    branches:
-      - main
-    paths-ignore:
-      - 'docs/**'
-      - 'scripts/**'
-      - 'templates/**'
-      - '.github/workflows/**'
-  workflow_dispatch:
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
-jobs:
-  collect-schemas:
-    runs-on: ubuntu-latest
-    outputs:
-      schemas: ${{ steps.collect.outputs.schemas }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Collect OpenAPI schemas
-        id: collect
-        run: |
-          ./scripts/collect-schemas.sh
-
-  build-docs:
-    needs: collect-schemas
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        schema: ${{ fromJson(needs.collect-schemas.outputs.schemas) }}
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-
-      - name: Install Redocly CLI
-        run: npm install -g @redocly/cli@latest
-
-      - name: Build documentation for ${{ matrix.schema }}
-        run: |
-          ./scripts/build-single-doc.sh ${{ matrix.schema }} docs
-
-      - name: Upload HTML artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: html-${{ matrix.schema }}
-          path: docs/${{ matrix.schema }}.html
-
-  generate-index:
-    needs: [collect-schemas, build-docs]
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Download all HTML artifacts
-        uses: actions/download-artifact@v4
-        with:
-          pattern: html-*
-          path: docs
-          merge-multiple: true
-
-      - name: Get commit dates and set environment variables
-        run: |
-          # Get commit dates for each schema and set as environment variables
-          for schema in $(echo '${{ needs.collect-schemas.outputs.schemas }}' | jq -r '.[]'); do
-            commit_date=$(./scripts/get-commit-info.sh "$schema")
-            echo "COMMIT_DATE_${schema^^}=$commit_date" >> $GITHUB_ENV
-            echo "Set COMMIT_DATE_${schema^^}=$commit_date"
-          done
-
-      - name: Generate index.html
-        run: |
-          ./scripts/generate-index.sh docs templates/index.html
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-
-      - name: Upload pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: 'docs'
-
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+#name: Deploy API Documentation
+#
+#on:
+#  push:
+#    branches:
+#      - main
+#    paths-ignore:
+#      - 'docs/**'
+#      - 'scripts/**'
+#      - 'templates/**'
+#      - '.github/workflows/**'
+#  workflow_dispatch:
+#
+#permissions:
+#  contents: read
+#  pages: write
+#  id-token: write
+#
+#concurrency:
+#  group: "pages"
+#  cancel-in-progress: false
+#
+#jobs:
+#  collect-schemas:
+#    runs-on: ubuntu-latest
+#    outputs:
+#      schemas: ${{ steps.collect.outputs.schemas }}
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#        with:
+#          fetch-depth: 0
+#
+#      - name: Collect OpenAPI schemas
+#        id: collect
+#        run: |
+#          ./scripts/collect-schemas.sh
+#
+#  build-docs:
+#    needs: collect-schemas
+#    runs-on: ubuntu-latest
+#    strategy:
+#      matrix:
+#        schema: ${{ fromJson(needs.collect-schemas.outputs.schemas) }}
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#        with:
+#          fetch-depth: 0
+#
+#      - name: Setup Node.js
+#        uses: actions/setup-node@v4
+#        with:
+#          node-version: '22'
+#
+#      - name: Install Redocly CLI
+#        run: npm install -g @redocly/cli@latest
+#
+#      - name: Build documentation for ${{ matrix.schema }}
+#        run: |
+#          ./scripts/build-single-doc.sh ${{ matrix.schema }} docs
+#
+#      - name: Upload HTML artifact
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: html-${{ matrix.schema }}
+#          path: docs/${{ matrix.schema }}.html
+#
+#  generate-index:
+#    needs: [collect-schemas, build-docs]
+#    environment:
+#      name: github-pages
+#      url: ${{ steps.deployment.outputs.page_url }}
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#        with:
+#          fetch-depth: 0
+#
+#      - name: Download all HTML artifacts
+#        uses: actions/download-artifact@v4
+#        with:
+#          pattern: html-*
+#          path: docs
+#          merge-multiple: true
+#
+#      - name: Get commit dates and set environment variables
+#        run: |
+#          # Get commit dates for each schema and set as environment variables
+#          for schema in $(echo '${{ needs.collect-schemas.outputs.schemas }}' | jq -r '.[]'); do
+#            commit_date=$(./scripts/get-commit-info.sh "$schema")
+#            echo "COMMIT_DATE_${schema^^}=$commit_date" >> $GITHUB_ENV
+#            echo "Set COMMIT_DATE_${schema^^}=$commit_date"
+#          done
+#
+#      - name: Generate index.html
+#        run: |
+#          ./scripts/generate-index.sh docs templates/index.html
+#
+#      - name: Setup Pages
+#        uses: actions/configure-pages@v4
+#
+#      - name: Upload pages artifact
+#        uses: actions/upload-pages-artifact@v3
+#        with:
+#          path: 'docs'
+#
+#      - name: Deploy to GitHub Pages
+#        id: deployment
+#        uses: actions/deploy-pages@v4
