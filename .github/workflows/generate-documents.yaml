@@ -10,7 +10,7 @@ jobs:
       - name: Build Document by osdg
         uses: usbharu/osdg-build-action@v0.0.8
         with:
-          repo: https://${{ github.repository }}
+          repo: https://github.com/${{ github.repository }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: './site/out'
