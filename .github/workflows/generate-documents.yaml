@@ -8,9 +8,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build Document by osdg
-        uses: usbharu/osdg-build-action@v0.0.7
+        uses: usbharu/osdg-build-action@v0.0.8
         with:
-          repo: ${{ github.repositoryUrl }}
+          repo: https://${{ github.repository }}
       - uses: actions/upload-pages-artifact@v3
         with:
           path: './site/out'
