@@ -2,7 +2,7 @@ name: generate-documents.yaml
 on:
   push:
     branches:
-      - master
+      - main
 jobs:
   build-documents:
     runs-on: ubuntu-latest
