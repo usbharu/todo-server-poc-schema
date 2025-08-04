@@ -71,6 +71,18 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/task'
+              examples:
+                existingTasks:
+                  summary: Existing tasks
+                  value:
+                    - id: '12345'
+                      title: 'Sample Task 1'
+                    - id: '67890'
+                      title: 'Sample Task 2'
+                emptyTasks:
+                  summary: No tasks available
+                  value: []
+
         '401':
           description: Unauthorized
           content:
