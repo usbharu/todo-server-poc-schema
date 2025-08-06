@@ -11,6 +11,8 @@ jobs:
   build-documents:
     runs-on: ubuntu-latest
     steps:
+      - name: setup pages
+        uses: actions/configure-pages@v4
       - name: Build Document by osdg
         uses: usbharu/osdg-build-action@v0.1.2
         with:
