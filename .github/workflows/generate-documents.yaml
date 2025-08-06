@@ -15,7 +15,7 @@ jobs:
         uses: usbharu/osdg-build-action@v0.1.0
         with:
           repo: https://github.com/${{ github.repository }}
-          fron-ref: "tags/v0.1.0"
+          fron-ref: "v0.1.0"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: './site/out'
