@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build Document by osdg
-        uses: usbharu/osdg-build-action@v0.1.0
+        uses: usbharu/osdg-build-action@v0.1.1
         with:
           repo: https://github.com/${{ github.repository }}
           fron-ref: "v0.1.0"
