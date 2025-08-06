@@ -1,0 +1,22 @@
+name: generate-documents.yaml
+on:
+  push:
+    branches:
+      - main
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+jobs:
+  build-documents:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build Document by osdg
+        uses: usbharu/osdg-build-action@v0.1.2
+        with:
+          repo: https://github.com/${{ github.repository }}
+          fron-ref: "v0.1.0"
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: './site/out'
+      - uses: actions/deploy-pages@v4
