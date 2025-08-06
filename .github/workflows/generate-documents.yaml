@@ -12,9 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Build Document by osdg
-        uses: usbharu/osdg-build-action@v0.0.11
+        uses: usbharu/osdg-build-action@v0.1.0
         with:
           repo: https://github.com/${{ github.repository }}
+          fron-ref: "tags/v0.1.0"
       - uses: actions/upload-pages-artifact@v3
         with:
           path: './site/out'
